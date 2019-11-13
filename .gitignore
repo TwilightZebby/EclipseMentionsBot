@@ -1,0 +1,15 @@
+# For security
+config.js
+database.sqlite
+/bot_modules
+
+# For tidyness
+/helpful_stuff
+/node_modules
+/.vs
+
+# To hide DEV ONLY commands
+/commands/reset.js
+
+# To hide my plans :P
+TODO.md
