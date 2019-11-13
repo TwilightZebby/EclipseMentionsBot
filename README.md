@@ -1,7 +1,9 @@
 ---
-# EclipseRoles Bot
+# EclipseMentions Bot
 
 A small Bot which aims to expand the current Mention system on Discord!
+
+Invite the Bot to your Server by clicking here!
 
 ---
 

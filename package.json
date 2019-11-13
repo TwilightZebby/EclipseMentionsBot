@@ -1,7 +1,7 @@
 {
-  "name": "TwilightBot",
-  "version": "1.8.0",
-  "description": "A small Discord bot I made.",
+  "name": "EclipseMentionsBot",
+  "version": "1.0.0",
+  "description": "A Discord Bot made to expand Discords current Mention System!",
   "main": "index.js",
   "dependencies": {
     "@discordjs/uws": "^11.149.1",
