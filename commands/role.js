@@ -29,6 +29,18 @@ module.exports = {
       
         return message.guild.roles.get(id);
       }
+
+      // Just to prevent SQL injection and stuff like that.....
+      function checkPermission(permission) {
+        
+        if(permission != "deny" && permission != "allow") {
+          permission = null;
+          return permission;
+        } else {
+          return permission;
+        }
+
+      }
       
       // First, check there are three arguements!
       if(args.length != 3) {
@@ -37,14 +49,18 @@ module.exports = {
 
       // Grab the three arguements we need
       const roleToEdit = getRoleFromMention(args.shift());
-      const rolePermission = args.shift();
+      const rolePermission = checkPermission(args.shift());
       const rolePing = getRoleFromMention(args.shift());
       const guildsID = message.guild.id; // Need this for database
 
       // Error Checking - We don't want to store null values!
       if(roleToEdit == null || rolePing == null) {
         return message.reply(`Something went wrong. Ensure you gave a ROLE mention instead of a USER or CHANNEL!\n
-        Note: \`@everyone\` and \`@here\` Mentions are NOT supported. Yet.`);
+        Note: \`@everyone\` and \`@here\` Mentions are NOT supported.`);
+      }
+
+      if(rolePermission == null) {
+        return message.reply(`Something went wrong. Ensure you input either \"allow\" or \"deny\" as the Permission!`);
       }
 
       // Grab the Role IDs to save to Database
