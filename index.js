@@ -69,11 +69,49 @@ client.on("message", async (message) => {
     *********************/
 
     async function CheckAgainstDatabase(pingedMention, authorRole, guildsID) {
-      const roleCheck = await RoleData.findOne({ where: { guildID: guildsID, userRole: authorRole, pingRole: pingedMention } });
+      const roleCheck = await RoleData.findOne({ where: { guildID: guildsID, userRole: authorRole, pingRole: pingedMention } })
+        .catch(err => console.error(`ERROR: Something happened. - index.js roleCheck - \n${err}`));
       if(roleCheck) {
         return roleCheck.dataValues.userPermission;
       } else {
         return false;
+      }
+    }
+
+    /*********************
+    * To grab the highest Role (of the Author) saved to the Database
+    *********************/
+
+    async function GrabHighestSavedRole(message, guildsID) {
+      const highestSavedRole = message.member.roles.highest.id;
+      const authorRoleCheck = await RoleData.findAll({ where: { guildID: guildsID, userRole: highestSavedRole } })
+        .catch(err => console.error(`ERROR: Something happened. - index.js authorRoleCheck - \n${err}`));
+      if(authorRoleCheck.length > 0) {
+        return highestSavedRole;
+      } else {
+        // If the actual Highest Role isn't saved in the Database
+        var storeRoles = Array.from(message.member.roles.values());
+        // Remove the @everyone Role
+        const lowestBin = storeRoles.pop();
+
+        var storeHighestRole = null;
+
+        for(let i = 0; i < storeRoles.length; i++) {
+          let roleID = storeRoles[i].id;
+
+          let newRoleCheck = await RoleData.findAll({ where: { guildID: guildsID, userRole: roleID } })
+            .catch(err => console.error(`ERROR: Something happened. - index.js newRoleCheck - \n${err}`));
+
+          if(newRoleCheck.length > 0) {
+            i += 999;
+            storeHighestRole = roleID;
+          } else {
+            storeHighestRole = false;
+          }
+
+        }
+        return storeHighestRole;
+
       }
     }
 
@@ -89,9 +127,12 @@ client.on("message", async (message) => {
 
       // Grab the IDs needed
       var pingedID = mentionGrab.id;
-      var authorID = message.member.roles.highest.id;
       var guildsID = message.guild.id;
-      
+      var authorID = await GrabHighestSavedRole(message, guildsID);
+      if(authorID == false) {
+        return;
+      }
+
       var uPermis = await CheckAgainstDatabase(pingedID, authorID, guildsID);
       if(uPermis == false) {
         return;

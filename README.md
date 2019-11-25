@@ -18,6 +18,8 @@ Now, using the Bot, you can specify *which* Roles can `@mention` other Roles!
 
 **Note 2:** Additionally, any Role you have stored in this Bot's Database *MUST* have its `Allow @mention of this Role` Permission enabled! (Well, the Roles you want to prevent/allow `@mentions` of anyways!)
 
+**Note 3:** Furthermore, the `@everyone` and `@here` Roles/Mentions are NOT SUPPORTED WITH THIS BOT!
+
 ---
 
 ## Example please!
@@ -33,13 +35,22 @@ With the current system, you'd have to allow *everyone* to be able to `@mention`
 
 Simple really.
 
-- The Bot listens out for a `@mention`, specifically one mentioning a *Role*.
-- It then checks the *highest Role* of the User which sent that `@mention`.
-- (It also checks *which* Role was `@mention`ed)
-- Then, it checks the settings saved by the Owner of the Server.
-- If the author Role of the Mention is granted permission to `@mention` the sent Mention, then nothing else happens.
-- If the author Role of the Mention is *denied* permission, then the Bot deletes the Message containing the `@mention`.
-- *If an `@mention` is deleted, then the Bot will dump a message for the sender. This can also assist in deleting those Ghost Pings!*
+- First the Bot checks if a message contains an `@mention`. *Role Mentions only, not User/Channel!*
+> If it does **NOT**, nothing happens.
+
+- Then, it grabs the Roles the User who sent the `@mention` has. *This User is known as the Author*
+> The `@everyone` Role is **IGNORED**
+
+- Now, going from *highest* to lowest, the Bot checks each of the Author's Roles against the Database.
+> If there are **NO** matches, nothing happens!
+> The Bot will take the first match (if any) and goes onto the next step
+
+- Using the first match, the Bot then grabs the database entry containing *both* the Author's Role and the `@mentioned` Role.
+- Now, using said entry, the Permission is checked.
+> If the saved permission is "allow" - nothing else happens!
+> Else if the saved permission is "deny" - the message gets deleted; and the Bot pings one to the Author explaining why.
+
+*Basically, it's a Ladder Permission System. Ones at the top will override below ones if both are saved to the Database.*
 
 ---
 
@@ -53,9 +64,7 @@ Currently, the only thing that happens after a `@mention` is deleted, is that th
 
 ## Ideas/Suggestions
 
-If you want to suggest something, either create a thing in the Issues Tab above (I'll mark it as "Suggestion"); OR throw it my way on Discord/Twitter?
-
-I have a personal Ideas list [over here](https://github.com/TwilightZebby/EclipseRolesBot/wiki) at the Wiki of this Repo.
+If you want to suggest something, either create a thing in the Issues Tab above (I'll mark it as "Suggestion"); OR throw it my way on Discord/Twitter, and I'll add it there for you.
 
 ---
 
