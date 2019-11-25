@@ -8,6 +8,7 @@ module.exports = {
     guildOnly: true,
     aliases: ['serverinfo', 'gi', 'si', 'g', 's'],
     commandType: 'hidden',
+    accessPerm: 4,
     execute(message, args) {
       const guildEmbed = new Discord.MessageEmbed().setColor('#9e139e').setFooter('Guild Information Module');
 

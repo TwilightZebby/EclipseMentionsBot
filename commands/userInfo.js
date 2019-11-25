@@ -8,6 +8,7 @@ module.exports = {
     args: true,
     aliases: ['user', 'ui', 'u'],
     commandType: 'hidden',
+    accessPerm: 4,
     execute(message, args) {
       const userEmbed = new Discord.MessageEmbed().setColor('#9e139e').setFooter('User Information Module');
 

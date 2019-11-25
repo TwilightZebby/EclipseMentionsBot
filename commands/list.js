@@ -9,6 +9,7 @@ module.exports = {
     //aliases: [''],
     //args: true,
     commandType: 'role',
+    accessPerm: 2,
     async execute(message) {
       // To limit this command to Guild Owners only
       if(message.author.id != message.guild.ownerID) {

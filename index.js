@@ -206,13 +206,21 @@ client.on("message", async (message) => {
   }
 
   // Check Command's Guild Access
-  if (command.guildAccess === 'private' && message.guild.id != PRIVATE) {
-    console.log('Private Command Attempted in invalid Guild');
-    return message.reply(`Sorry, but that command cannot be used in this Server!\nIt is limited to <@156482326887530498>\'s private server.\n*No, you are not getting access to it*`);
-  } else if (command.guildAccess === 'trusted' && !TRUSTED.includes(message.guild.id)) {
-    console.log('Trusted Command Attempted in invalid Guild');
-    return message.reply(`Sorry, but that command cannot be used in this Server!\nIt is limited to Servers <@156482326887530498> has trusted.`);
+  if (command.accessPerm == 1) {
+    // DEV ONLY
+    if(message.author.id != '156482326887530498') {
+      return message.reply(`Sorry, but this command is limited to the Bot Developer!`);
+    }
+  } else if(command.accessPerm == 2) {
+    // Guild Owners ONLY
+    if(message.author.id != message.guild.ownerID) {
+      return message.reply(`Sorry, but this command is limited to the Guild Owner.`);
+    }
+  } else if(command.accessPerm == 3) {
+    // Saved Guild Admins ONLY
+    // PLACEHOLDER
   }
+  // accessPerm of 4 means EVERYONE can use it.
 
   // If there is, grab and run that command's execute() function
   try {

@@ -6,6 +6,7 @@ module.exports = {
     description: 'List all of my commands or info about a specific command.',
     usage: '[command name]',
     commandType: 'general',
+    accessPerm: 4,
     execute(message, args) {
       const { commands } = message.client;
       const helpEmbed = new Discord.MessageEmbed().setColor('#07f51b').setFooter('Help Module');
