@@ -23,6 +23,17 @@ client.on("ready", () => {
   console.log("I am ready!");
   client.user.setActivity(`${PREFIX}help`); // Sets a Playing Status on the Bot
 });
+
+// Catch those warnings
+client.on("warn", (warning) => {
+  console.log("Warning: ", warning);
+});
+
+// Catch when the RateLimit is hit!
+client.on("rateLimit", (rlMsg) => {
+  console.log("RateLimit was hit: ", rtMsg);
+});
+
 /***********************************************/
 /*THE COMMANDS*/
 /*Runs whenever a message is sent in a command the Bot has access to*/
