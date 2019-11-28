@@ -46,6 +46,11 @@ client.on("message", async (message) => {
       return;
     }
 
+    // Override for Guild Owners
+    if(message.author.id === message.guild.ownerID) {
+      return;
+    }
+
     // The functions
     /*********************
     * To check if there are any mentions!
@@ -161,7 +166,11 @@ client.on("message", async (message) => {
     } else if(mentionCheck == false) {
       return;
     }
-	};
+  };
+  
+  // *************************
+  // FOR COMMANDS
+  // *************************
 
   // Slides the PREFIX off the command
   const args = message.content.slice(PREFIX.length).split(/ +/);

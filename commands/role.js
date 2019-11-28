@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../bot_modules/constants.js');
 const { RoleData } = require('../bot_modules/tables.js');
+const Discord = require("discord.js");
 
 module.exports = {
     name: 'role',
@@ -15,6 +16,9 @@ module.exports = {
       if(message.author.id != message.guild.ownerID) {
         return message.reply(`Sorry, but this command is limited to the Guild Owner.`);
       }
+
+      // Creation of Embed
+      const roleEmbed = new Discord.MessageEmbed().setColor('#07f5f1').setFooter('Mention Management Module');
 
       // Function for grabbing them role objects!
       function getRoleFromMention(mention) {
@@ -45,7 +49,8 @@ module.exports = {
       
       // First, check there are three arguements!
       if(args.length != 3) {
-        return message.reply(`Sorry, but there wasn't enough arguments!`);
+        roleEmbed.addField(`\u200B`, `Sorry, but there wasn\'t enough arguments!`);
+        return message.channel.send(roleEmbed);
       }
 
       // Grab the three arguements we need
@@ -56,12 +61,14 @@ module.exports = {
 
       // Error Checking - We don't want to store null values!
       if(roleToEdit == null || rolePing == null) {
-        return message.reply(`Something went wrong. Ensure you gave a ROLE mention instead of a USER or CHANNEL!\n
-        Note: \`@everyone\` and \`@here\` Mentions are NOT supported.`);
+        roleEmbed.addField(`Something went wrong...`, `Ensure you gave a ROLE mention instead of a USER or CHANNEL mention!\n
+        Note: \`@everyone\` and \`@here\` Mentions are NOT supported.`)
+        return message.channel.send(roleEmbed);
       }
 
       if(rolePermission == null) {
-        return message.reply(`Something went wrong. Ensure you input either \"allow\" or \"deny\" as the Permission!`);
+        roleEmbed.addField(`Something went wrong...`, `Ensure you input either \"allow\" or \"deny\" as the Permission!`)
+        return message.channel.send(roleEmbed);
       }
 
       // Grab the Role IDs to save to Database
@@ -71,7 +78,8 @@ module.exports = {
       // Attempt to edit existing data first IF IT EXISTS
       const editRole = await RoleData.update({ userPermission: rolePermission }, { where: { guildID: guildsID, userRole: roleToEditID, pingRole: rolePingID } });
       if(editRole > 0) {
-        return message.reply(`Successfully saved Role Mention settings!`);
+        roleEmbed.addField(`\u200B`, `✅ Successfully saved Role Mention settings!`);
+        return message.channel.send(roleEmbed);
       }
 
       // Otherwise, create the Database entry!
@@ -82,7 +90,8 @@ module.exports = {
           pingRole: rolePingID,
           userPermission: rolePermission,
         });
-        return message.reply(`Successfully saved Role Mention settings!`);
+        roleEmbed.addField(`\u200B`, `✅ Successfully created and saved Role Mention settings!`);
+        return message.channel.send(roleEmbed);
       }
       catch (e) {
         if(e.name === 'SequelizeUniqueConstraintError') {
@@ -90,8 +99,8 @@ module.exports = {
         } else if(e.name === 'SequelizeDatabaseError') {
           return message.reply(`Oops! Seems like there is something wrong with the Database! Please send a message to \<\@156482326887530498\> is this error continues.`);
         } else {
-          //return message.reply(`Hmmmm, something went wrong - thus, this has not been saved.`);
-          return message.channel.send(`${e}`);
+          return message.reply(`Hmmmm, something went wrong - thus, this has not been saved.`);
+          //return message.channel.send(`${e}`);
         }
       }
 

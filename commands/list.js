@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../bot_modules/constants.js');
 const { RoleData } = require('../bot_modules/tables.js');
+const Discord = require("discord.js");
 
 module.exports = {
     name: 'list',
@@ -16,12 +17,16 @@ module.exports = {
         return message.reply(`Sorry, but this command is limited to the Guild Owner.`);
       }
 
+      // Creation of Embed
+      const listEmbed = new Discord.MessageEmbed().setColor('#a906d1').setFooter('Mention Management Module');
+
       // Grab all the stored data for the Guild requested
-      const roleList = await RoleData.findAll({ where: { guildID: message.guild.id } });
+      const roleList = await RoleData.findAll({ where: { guildID: message.guild.id }, order: [ ['userRole', 'ASC'] ] });
 
       // In case there is NOTHING
       if(roleList < 1) {
-        return message.channel.send(`There is nothing in the Database for this Guild.`);
+        listEmbed.addField(`\u200B`, `There is nothing in the Database for this Guild.`);
+        return message.channel.send(listEmbed);
       }
       
       // Store all the data in an Array for outputting to the User
@@ -41,10 +46,12 @@ module.exports = {
 
         let dataString = `\<\@\&` + uRole + `\> is **` + uPerm + `** @mentioning the \<\@\&` + pRole + `\> Role.`;
         data.push(dataString);
+
       }
 
       // Output the data
-      message.channel.send(data.join(` \n `), { split: true });
+      return message.channel.send(data.join(` \n `), { split: true });
+      //return message.channel.send(listEmbed);
 
       //END OF COMMAND
     },
