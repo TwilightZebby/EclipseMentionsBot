@@ -28,30 +28,39 @@ module.exports = {
         listEmbed.addField(`\u200B`, `There is nothing in the Database for this Guild.`);
         return message.channel.send(listEmbed);
       }
-      
-      // Store all the data in an Array for outputting to the User
-      var data = [];
-      for(let i = 0; i < roleList.length; i++) {
-        let uRole = message.guild.roles.get(roleList[i].userRole);
-        let pRole = message.guild.roles.resolve(message.guild.roles.get(roleList[i].pingRole));
-        let perm = roleList[i].userPermission;
-        var uPerm;
 
-        if(perm === 'deny') {
-          uPerm = "denied";
+      // Grab the amount of Roles in the Guild, and use that as part of
+      // the loop to output the Roles saved to the Database
+      // (Each userRole should be its own Embed)
+      var roleStoreArray = message.guild.roles.array();
+      var everyoneBin = roleStoreArray.shift();
+
+      for(let r = 0; r < roleStoreArray.length; r++) {
+        let data = [];
+        let roleSearch = await RoleData.findAll({ where: { guildID: message.guild.id, userRole: roleStoreArray[r].id }, order: [ ['pingRole', 'DESC'] ] });
+        if(roleSearch.length > 0) {
+          let embedString = "";
+
+          for(let s = 0; s < roleSearch.length; s++) {
+            var uPerm;
+            if(roleSearch[s].userPermission == 'deny') {
+              uPerm = "❌ Cannot ";
+            } else if(roleSearch[s].userPermission == 'allow') {
+              uPerm = "✅ Allowed to ";
+            }
+
+            let pingedRole = message.guild.roles.get(roleSearch[s].pingRole);
+
+            embedString = uPerm + `mention \<\@\&` + pingedRole + `\>`;
+            data.push(embedString);
+          }
+
+          let uRole = message.guild.roles.get(roleSearch[0].userRole);
+          listEmbed.addField(`${uRole.name}`, `${data.join(` \n `)}`);
         }
-        else if(perm === 'allow') {
-          uPerm = "allowed";
-        }
-
-        let dataString = `\<\@\&` + uRole + `\> is **` + uPerm + `** @mentioning the \<\@\&` + pRole + `\> Role.`;
-        data.push(dataString);
-
       }
 
-      // Output the data
-      return message.channel.send(data.join(` \n `), { split: true });
-      //return message.channel.send(listEmbed);
+      return message.channel.send(listEmbed);
 
       //END OF COMMAND
     },
