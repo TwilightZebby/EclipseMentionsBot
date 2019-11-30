@@ -40,8 +40,14 @@ client.on("rateLimit", (rlMsg) => {
 
 client.on("message", async (message) => {
 
+  // First, Prefixes
+  // Currently either m% or @mentioning of the Bot's Account.
+  const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(PREFIX)})\\s*`);
+  //if (!prefixRegex.test(message.content)) return; // Stop if no Prefix is found
+
   // If the msg does NOT start with the PREFIX, OR it was sent by the bot itself - STOP
-  if (!message.content.startsWith(PREFIX) || message.author.bot) {
+  if (!prefixRegex.test(message.content) || message.author.bot) {
 		if(message.author.bot) {
       return;
     }
@@ -173,7 +179,8 @@ client.on("message", async (message) => {
   // *************************
 
   // Slides the PREFIX off the command
-  const args = message.content.slice(PREFIX.length).split(/ +/);
+  const [, matchedPrefix] = message.content.match(prefixRegex);
+  const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
   // Slaps the cmd into its own var
   const commandName = args.shift().toLowerCase();
   // If there is NOT a command with the given name or aliases, exit early
