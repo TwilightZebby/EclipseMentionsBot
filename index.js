@@ -31,7 +31,7 @@ client.on("warn", (warning) => {
 
 // Catch when the RateLimit is hit!
 client.on("rateLimit", (rlMsg) => {
-  console.log("RateLimit was hit: ", rtMsg);
+  console.log("RateLimit was hit: ", rlMsg);
 });
 
 /***********************************************/
@@ -44,7 +44,6 @@ client.on("message", async (message) => {
   // Currently either m% or @mentioning of the Bot's Account.
   const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(PREFIX)})\\s*`);
-  //if (!prefixRegex.test(message.content)) return; // Stop if no Prefix is found
 
   // If the msg does NOT start with the PREFIX, OR it was sent by the bot itself - STOP
   if (!prefixRegex.test(message.content) || message.author.bot) {

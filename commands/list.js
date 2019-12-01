@@ -18,10 +18,11 @@ module.exports = {
       }
 
       // Creation of Embed
-      const listEmbed = new Discord.MessageEmbed().setColor('#a906d1').setFooter('Mention Management Module');
+      const listEmbed = new Discord.MessageEmbed().setColor('#07f5f1').setFooter('Mention Management Module');
 
       // Grab all the stored data for the Guild requested
-      const roleList = await RoleData.findAll({ where: { guildID: message.guild.id }, order: [ ['userRole', 'ASC'] ] });
+      const roleList = await RoleData.findAll({ where: { guildID: message.guild.id }, order: [ ['userRole', 'ASC'] ] })
+        .catch(err => console.error(`ERROR: Something happened. - list.js roleList - \n${err}`));
 
       // In case there is NOTHING
       if(roleList < 1) {
@@ -37,7 +38,8 @@ module.exports = {
 
       for(let r = 0; r < roleStoreArray.length; r++) {
         let data = [];
-        let roleSearch = await RoleData.findAll({ where: { guildID: message.guild.id, userRole: roleStoreArray[r].id }, order: [ ['pingRole', 'DESC'] ] });
+        let roleSearch = await RoleData.findAll({ where: { guildID: message.guild.id, userRole: roleStoreArray[r].id }, order: [ ['pingRole', 'DESC'] ] })
+          .catch(err => console.error(`ERROR: Something happened. - list.js roleSearch - \n${err}`));
         if(roleSearch.length > 0) {
           let embedString = "";
 

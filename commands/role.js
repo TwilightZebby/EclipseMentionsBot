@@ -62,12 +62,12 @@ module.exports = {
       // Error Checking - We don't want to store null values!
       if(roleToEdit == null || rolePing == null) {
         roleEmbed.addField(`Something went wrong...`, `Ensure you gave a ROLE mention instead of a USER or CHANNEL mention!\n
-        Note: \`@everyone\` and \`@here\` Mentions are NOT supported.`)
+        Note: \`@everyone\` and \`@here\` Mentions are NOT supported.`);
         return message.channel.send(roleEmbed);
       }
 
       if(rolePermission == null) {
-        roleEmbed.addField(`Something went wrong...`, `Ensure you input either \"allow\" or \"deny\" as the Permission!`)
+        roleEmbed.addField(`Something went wrong...`, `Ensure you input either \"allow\" or \"deny\" as the Permission!`);
         return message.channel.send(roleEmbed);
       }
 
@@ -76,7 +76,8 @@ module.exports = {
       const rolePingID = rolePing.id;
 
       // Attempt to edit existing data first IF IT EXISTS
-      const editRole = await RoleData.update({ userPermission: rolePermission }, { where: { guildID: guildsID, userRole: roleToEditID, pingRole: rolePingID } });
+      const editRole = await RoleData.update({ userPermission: rolePermission }, { where: { guildID: guildsID, userRole: roleToEditID, pingRole: rolePingID } })
+        .catch(err => console.error(`ERROR: Something happened. - role.js editRole - \n${err}`));
       if(editRole > 0) {
         roleEmbed.addField(`\u200B`, `✅ Successfully saved Role Mention settings!`);
         return message.channel.send(roleEmbed);
