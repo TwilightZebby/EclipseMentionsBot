@@ -46,6 +46,7 @@ module.exports = {
         // Thing for assigning above values
         if(cUserMember) {
           cUserRoles = cUserMember.roles.array();
+          cUserRoles.sort((a, b) => { return b.rawPosition - a.rawPosition; });
           cUserJoinedGuild = cUserMember.joinedAt.toDateString();
           guildName = message.guild.name;
         }
