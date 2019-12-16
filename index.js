@@ -3,7 +3,7 @@ const fs = require('fs'); // Node's native file system
 const Discord = require("discord.js"); // Bringing in Discord.js
 const Sequelize = require('sequelize'); // Brings in Sequelize - used for Database stuff
 const { client, sequelize } = require('./bot_modules/constants.js'); // Brings in the Discord Bot's Client and Sequelize Database
-const { RoleData } = require('./bot_modules/tables.js'); // Brings in the Database Tables!
+const { RoleData, GuildPrefix } = require('./bot_modules/tables.js'); // Brings in the Database Tables!
 const { PREFIX, TOKEN } = require('./config.js'); // Slapping the PREFIX and token into their own vars
 client.commands = new Discord.Collection(); // Extends JS's native map class
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Picks up all the .js files in the commands folder
@@ -20,6 +20,7 @@ for (const file of commandFiles) { // Slaps all the command files into the Colle
 // To make sure the bot is up and running
 client.on("ready", () => {
   RoleData.sync();
+  //GuildPrefix.sync();
   console.log("I am ready!");
   client.user.setActivity(`${PREFIX}help`); // Sets a Playing Status on the Bot
 });

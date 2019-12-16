@@ -18,7 +18,7 @@ Now, using the Bot, you can specify *which* Roles can `@mention` other Roles!
 
 **Note 2:** Additionally, any Role you have stored in this Bot's Database *MUST* have its `Allow @mention of this Role` Permission enabled! (Well, the Roles you want to prevent/allow `@mentions` of anyways!)
 
-**Note 3:** Furthermore, the `@everyone` and `@here` Roles/Mentions are NOT SUPPORTED WITH THIS BOT!
+**Note 3:** Furthermore, the `@everyone` and `@here` Roles/Mentions are NOT SUPPORTED WITH THIS BOT! Well, not at the moment anyways....
 
 ---
 

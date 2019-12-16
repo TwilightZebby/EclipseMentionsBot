@@ -16,11 +16,10 @@ module.exports = {
       if(!args.length) {
         // Guide for managing Roles!
         helpEmbed.setTitle(`Basic guide to managing which Roles can ping other Roles:`);
-        helpEmbed.addField(`\u200B`, `Use the ${PREFIX}role command, under the following syntax:\n\`${PREFIX}role @roleToEdit allow/deny @rolePing\`\n
-        Where \`@roleToEdit\` is the Role you want to edit the permissions of;\n
-        \`allow/deny\` is where you state if \`@roleToEdit\` should be allowed to ping \`@rolePing\`;\n
-        and \`@rolePing\` is the Role Ping your using.\n
-        An example can be found under the \`${PREFIX}example\` command.`);
+        helpEmbed.addField(`\u200B`, `Use the \`${PREFIX}role\` command to manage the permissions of which Roles can mention other Roles.\n
+        You will be guided through a process - so it *should* be easy!\n
+        **Note:** The \`@everyone\` and \`@here\` Mentions are not supported yet.\n
+        **Note 2:** This Bot uses a 'top-down' Permission System. Basically, higher Roles override lower Roles.`);
 
         helpEmbedTwo.setTitle(`A list of all the commands in this Bot!`);
         helpEmbedTwo.setDescription(`Use \`${PREFIX}help command\` for more info on a chosen command!`);  
