@@ -161,7 +161,9 @@ client.on("message", async (message) => {
 
       } else if(uPermis == 'deny') {
         await message.delete();
-        return message.reply(`Sorry, but you don\'t have the permissions to \`@ping\` that Role!`);
+        var pRole = message.guild.roles.get(pingedID);
+        var pRoleName = pRole.name;
+        return message.reply(`Sorry, but you don\'t have the permissions to \`@ping\` the **${pRoleName}** Role!`);
 
       } else if(uPermis == 'allow') {
         return;

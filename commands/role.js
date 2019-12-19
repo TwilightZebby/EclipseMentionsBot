@@ -16,15 +16,22 @@ module.exports = {
 
       // Grab the Roles in the Guild
       var roleStoreArray = message.guild.roles.array();
-      var everyoneBin = roleStoreArray.shift(); // Remove the @everyone or else things will break!
       roleStoreArray.sort((a, b) => { return b.rawPosition - a.rawPosition });
+      
       // For help in Embed creation
       var data = [];
+      var dataTwo = [];
 
-      for(let i = 0; i < roleStoreArray.length; i++) {
-        let roleStringOne = (i + 1) + ": \<\@\&" + roleStoreArray[i].id + "\>";
+      for(let i = 0; i < (roleStoreArray.length - 1); i++) {
+        let roleStringOne = i + ": \<\@\&" + roleStoreArray[i].id + "\>";
         data.push(roleStringOne);
       }
+      
+      for(let j = 0; j < (roleStoreArray.length - 1); j++) {
+        let roleStringOneTwo = j + ": \<\@\&" + roleStoreArray[j].id + "\>";
+        dataTwo.push(roleStringOneTwo);
+      }
+
 
       roleEmbed.addField(`List of Roles in ${message.guild.name}:`, data.join(' \n '));
       roleEmbed.addField(`Step One:`, `Please choose, using one of the numbers listed, the Role you would like to manage`);
@@ -65,14 +72,14 @@ module.exports = {
         if(userChoice == null) {
           roleEmbed.addField(`Oops!`, `Something broke. Don't worry, just try the command again!`);
           return message.channel.send(roleEmbed);
-        } else if(userChoice > roleStoreArray.length) {
+        } else if(userChoice > (roleStoreArray.length - 1)) {
           roleEmbed.addField(`Whoops!`, `That number wasn't accepted. Please try using the command again.`);
           return message.channel.send(roleEmbed);
         }
 
-        userRoleChoice = roleStoreArray[userChoice - 1];
+        userRoleChoice = roleStoreArray[userChoice];
         roleEmbed.addField(`\u200B`, `Managing ${userRoleChoice} Role`);
-        roleEmbed.addField(`List of Roles in ${message.guild.name}:`, data.join(' \n '));
+        roleEmbed.addField(`List of Roles in ${message.guild.name}:`, dataTwo.join(' \n '));
         roleEmbed.addField(`Step Two:`, `Please select, using a number listed, which Role you would like prevent/allow ${userRoleChoice} from mentioning`);
         message.channel.send(roleEmbed);
         roleEmbed.spliceField(0, 3);
@@ -100,12 +107,12 @@ module.exports = {
         if(userChoice == null) {
           roleEmbed.addField(`Oops!`, `Something broke. Don't worry, just try the command again!`);
           return message.channel.send(roleEmbed);
-        } else if(userChoice > roleStoreArray.length) {
+        } else if(userChoice > (roleStoreArray.length - 1)) {
           roleEmbed.addField(`Whoops!`, `That number wasn't accepted. Please try the command again.`);
           return message.channel.send(roleEmbed);
         }
 
-        pingRoleChoice = roleStoreArray[userChoice - 1];
+        pingRoleChoice = roleStoreArray[userChoice];
 
         roleEmbed.addField(`Step Three:`, `Should ${userRoleChoice} be able to \`@mention\` ${pingRoleChoice}?`);
         roleEmbed.addField(`\u200B`, `Please enter either **allow** or **deny**`);
