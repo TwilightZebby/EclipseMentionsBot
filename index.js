@@ -9,6 +9,8 @@ client.commands = new Discord.Collection(); // Extends JS's native map class
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Picks up all the .js files in the commands folder
 const cooldowns = new Discord.Collection(); // For Cooldowns to work
 
+
+
 for (const file of commandFiles) { // Slaps all the command files into the Collection
     const command = require(`./commands/${file}`);
 
@@ -16,6 +18,8 @@ for (const file of commandFiles) { // Slaps all the command files into the Colle
     // with the key as the command name and the value as the exported module
     client.commands.set(command.name, command);
 }
+
+
 
 // To make sure the bot is up and running
 client.on("ready", () => {
@@ -35,9 +39,67 @@ client.on("rateLimit", (rlMsg) => {
   console.log("RateLimit was hit: ", rlMsg);
 });
 
+
+
+/***********************************************/
+// To handle when the Bot first joins a Guild
+// (for a custom "Hello there!" message)
+
+client.on('guildCreate', async (guild) => {
+
+  const channelStore = Array.from(guild.channels.values());
+  let gChannel;
+  for (let x = 0; x < channelStore.length; x++) {
+    let checkChannel = channelStore[x];
+    let channelPermissions = checkChannel.permissionsFor('627918420859420693');
+    if (channelPermissions.has('VIEW_CHANNEL') && channelPermissions.has('SEND_MESSAGES')) {
+      x += 999;
+      let joinEmbed = new Discord.MessageEmbed().setFooter('Bot Join Message').setColor('#03fc17');
+
+      joinEmbed.setTitle(`Hello everyone!`);
+      joinEmbed.setDescription(`I have been invited by the Server Owner (${guild.owner.displayName}) or someone with the **Admin Permission**.\n
+      My purpose is to silently watch your messages to see if they contain Role Mentions (like \`@role\`). Of course, that's only if I've been set up by the Server Owner.\n
+      When set up, I delete messages containing Role Mentions you don't have permission to ping!\n
+      I can be set up using the \`${PREFIX}role\` command.\n
+      A short guide can also be found under my Help Command!\n\n
+      Finally, **please make sure I have the Read Messages, Send Messages, and Manage Messages permissions! I can't work without them!**`);
+
+      checkChannel.send(joinEmbed);
+    }
+  }
+  return;
+
+});
+
+
+
+/***********************************************/
+// To handle deleting the Guild's Database when the Bot is kicked from the Guild
+
+client.on('guildMemberRemove', async (member) => {
+
+  // Ensure Member is the Bot
+  if (member.id !== '627918420859420693') {
+    return;
+  }
+
+  // Grab the Guild's ID and delete all entries in the Database for it
+  const dbDelete = await RoleData.destroy({ where: { guildID: member.guild.id } })
+        .catch(err => console.error(`ERROR: Something happened. - index.js dbDelete - \n${err}`));
+  if(!dbDelete) {
+    return console.log(`Nothing was deleted for ${member.guild.name} on Guild Leave`);
+  } else {
+    return console.log(`Deleted database for ${member.guild.name} on Guild Leave`);
+  }
+
+});
+
+
+
 /***********************************************/
 /*THE COMMANDS*/
 /*Runs whenever a message is sent in a command the Bot has access to*/
+/*Also handles the Mention Checking*/
 
 client.on("message", async (message) => {
 
