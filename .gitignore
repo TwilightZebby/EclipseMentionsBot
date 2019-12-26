@@ -11,6 +11,7 @@ database.sqlite
 
 # To hide DEV ONLY commands
 /commands/reset.js
+/commands/test.js
 
 # To hide my plans :P
 TODO.md
