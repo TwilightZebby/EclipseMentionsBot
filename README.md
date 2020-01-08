@@ -1,3 +1,15 @@
+# IMPORTANT - PLEASE READ
+
+I made this Bot thinking I could get around Discord's weak Role Mentioning Permission System.
+While the Bot *does* work, there's one thing I couldn't get around.
+
+**Ghost Pings**
+Yep. When a Mention is deleted, the Ping is **not**.
+Thus, everyone with the Role still has been pinged.
+
+Welp. I tried.
+So I'm leaving this here as proof of that. ;)
+
 ---
 # EclipseMentions Bot
 
