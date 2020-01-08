@@ -15,8 +15,6 @@ So I'm leaving this here as proof of that. ;)
 
 A small Bot which aims to expand the current Mention system on Discord!
 
-Invite the Bot to your Server by clicking here!
-
 ---
 
 ## What does this Bot do?
@@ -71,12 +69,6 @@ Simple really.
 I currently don't have plans to add a Punishment System into this Bot.
 
 Currently, the only thing that happens after a `@mention` is deleted, is that the User is sent a message explaining that they do *not* have the permissions to `@mention` that Role.
-
----
-
-## Ideas/Suggestions
-
-If you want to suggest something, either create a thing in the Issues Tab above (I'll mark it as "Suggestion"); OR throw it my way on Discord/Twitter, and I'll add it there for you.
 
 ---
 
